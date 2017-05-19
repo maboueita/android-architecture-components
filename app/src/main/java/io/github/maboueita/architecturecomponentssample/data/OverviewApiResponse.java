@@ -1,9 +1,11 @@
 package io.github.maboueita.architecturecomponentssample.data;
 
 
+import android.arch.lifecycle.ViewModel;
+
 import java.util.List;
 
-public class OverviewApiResponse {
+public class OverviewApiResponse extends ViewModel{
 
     private String status;
     private String copyright;

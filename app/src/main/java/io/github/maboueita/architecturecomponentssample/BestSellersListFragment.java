@@ -1,13 +1,14 @@
 package io.github.maboueita.architecturecomponentssample;
 
 
+import android.arch.lifecycle.LifecycleFragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class BestSellersListFragment extends Fragment {
+public class BestSellersListFragment extends LifecycleFragment {
 
 
     public BestSellersListFragment() {
