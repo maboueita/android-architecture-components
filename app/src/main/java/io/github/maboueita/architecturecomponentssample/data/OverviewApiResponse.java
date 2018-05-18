@@ -1,53 +1,71 @@
 package io.github.maboueita.architecturecomponentssample.data;
 
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProviders;
+import android.util.Log;
+
+import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class OverviewApiResponse extends ViewModel{
+import okhttp3.OkHttpClient;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
-    private String status;
-    private String copyright;
-    private int numOfResults;
-    private Results results;
+public class OverviewApiResponse extends ViewModel {
 
-    public int getNumOfResults() {
-        return numOfResults;
-    }
+    private static final String TAG = OverviewApiResponse.class.getSimpleName();
 
-    public void setNumOfResults(int numOfResults) {
-        this.numOfResults = numOfResults;
-    }
+    private LiveData<Results> results;
 
-    public Results getResults() {
+    public LiveData<Results> getResults() {
         return results;
     }
 
-    public void setResults(Results results) {
+    public void setResults(LiveData<Results> results) {
         this.results = results;
     }
 
-    public String getStatus() {
-        return status;
+    public OverviewApiResponse() {
+
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void init() {
+        OkHttpClient client = new OkHttpClient.Builder().build();
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(OverviewService.BASE_API_URL).client(client).addConverterFactory(GsonConverterFactory.create()).build();
+        OverviewService service = retrofit.create(OverviewService.class);
+        service.getBestSellers().enqueue(new Callback<Results>() {
+            @Override
+            public void onResponse(Call<OverviewApiResponse.Results> call, Response<OverviewApiResponse.Results> response) {
+                if (response.body() != null) {
+                    final MutableLiveData<Results> data = new MutableLiveData<>();
+                    data.setValue(response.body());
+                    Log.d(TAG, "onResponse: data? " + String.valueOf(data == null));
+                    Log.d(TAG, "data? " + String.valueOf(data.getValue() == null));
+                    Log.d(TAG, "data? " + String.valueOf(data.getValue()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<OverviewApiResponse.Results> call, Throwable t) {
+                Log.d(TAG, "onFailure: " + t.getLocalizedMessage());
+            }
+
+
+        });
     }
 
-    public String getCopyright() {
-        return copyright;
-    }
+    public class Results {
 
-    public void setCopyright(String copyright) {
-        this.copyright = copyright;
-    }
-
-
-    class Results {
-
+        @SerializedName("bestsellers_date")
         private String bestSellersDate;
+        @SerializedName("published_date_description")
         private String publishedDateDescription;
         private List<Lists> lists;
 
@@ -57,6 +75,9 @@ public class OverviewApiResponse extends ViewModel{
 
         public void setBestSellersDate(String bestSellersDate) {
             this.bestSellersDate = bestSellersDate;
+        }
+
+        public Results() {
         }
 
         public String getPublishedDateDescription() {
@@ -77,9 +98,16 @@ public class OverviewApiResponse extends ViewModel{
 
         class Lists {
 
+            @SerializedName("list_id")
             private int listId;
+            @SerializedName("list_name")
             private String listName;
+            @SerializedName("books")
             private List<Book> books;
+
+            public Lists() {
+
+            }
 
             public int getListId() {
                 return listId;
