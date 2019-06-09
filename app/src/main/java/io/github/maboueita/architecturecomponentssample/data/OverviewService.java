@@ -1,9 +1,6 @@
 package io.github.maboueita.architecturecomponentssample.data;
 
-import android.arch.lifecycle.LiveData;
-
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 
@@ -17,6 +14,6 @@ public interface OverviewService {
     
     @Headers("api-key:1834f843952d460da0fe61bec1e06e85")
     @GET("overview.json")
-    public Call<OverviewApiResponse.Results> getBestSellers();
+    public Call<OverviewViewModel.Results> getBestSellers();
 
 }
