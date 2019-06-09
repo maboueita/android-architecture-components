@@ -9,11 +9,10 @@ import retrofit2.http.Headers;
  */
 
 public interface OverviewService {
-
-    String BASE_API_URL = "http://api.nytimes.com/svc/books/v3/lists/";
-    
-    @Headers("api-key:fb999a49-abba-4853-9c73-595b582ef4d5")
-    @GET("overview.json")
+    String BASE_API_URL = "https://api.nytimes.com/svc/books/v3/lists/";
+    @Headers({
+            "Accept: application/json",
+    })
+    @GET("overview.json?api-key=GfKA3zS2UhPeiPjlfIeAN3jKYVRWK3sF")
     Call<OverviewViewModel.Results> getBestSellers();
-
 }

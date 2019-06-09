@@ -1,14 +1,10 @@
 package io.github.maboueita.architecturecomponentssample.data
 
-
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-
 import android.util.Log
-
 import com.google.gson.annotations.SerializedName
-
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
