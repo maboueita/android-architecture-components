@@ -12,8 +12,8 @@ public interface OverviewService {
 
     String BASE_API_URL = "http://api.nytimes.com/svc/books/v3/lists/";
     
-    @Headers("api-key:1834f843952d460da0fe61bec1e06e85")
+    @Headers("api-key:fb999a49-abba-4853-9c73-595b582ef4d5")
     @GET("overview.json")
-    public Call<OverviewViewModel.Results> getBestSellers();
+    Call<OverviewViewModel.Results> getBestSellers();
 
 }

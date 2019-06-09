@@ -10,6 +10,7 @@ import android.util.Log
 import com.google.gson.annotations.SerializedName
 
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -21,10 +22,11 @@ class OverviewViewModel : ViewModel() {
     var results: LiveData<Results>? = null
 
     fun init() {
-        val client = OkHttpClient.Builder().build()
+        val interceptor = HttpLoggingInterceptor()
+        interceptor.level = HttpLoggingInterceptor.Level.BODY
+        val okHttpClient = OkHttpClient.Builder().addInterceptor(interceptor).build()
         val retrofit = Retrofit.Builder()
-
-                .baseUrl(OverviewService.BASE_API_URL).client(client).addConverterFactory(GsonConverterFactory.create()).build()
+                .baseUrl(OverviewService.BASE_API_URL).client(okHttpClient).addConverterFactory(GsonConverterFactory.create()).build()
         val service = retrofit.create(OverviewService::class.java)
         service.bestSellers.enqueue(object : Callback<Results> {
             override fun onResponse(call: Call<OverviewViewModel.Results>, response: Response<OverviewViewModel.Results>) {
@@ -34,7 +36,6 @@ class OverviewViewModel : ViewModel() {
                     Log.d("YOLO ", "data is here. success.")
                 }
             }
-
             override fun onFailure(call: Call<OverviewViewModel.Results>, t: Throwable) {
                 //TODO: Add logging.
                 Log.e("YOLO error ", t.message)
